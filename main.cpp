@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "sender.h"
 #include "receiver.h"
+#include "logindialog.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -17,10 +18,11 @@ int main(int argc, char *argv[])
         bool useTopic = false;
         bool sessionTransacted = false;
         //String userName =
-        MainWindow w(0, brokerURI, 0, useTopic, sessionTransacted);
-        //w.setWindowTitle("BeeBeeChat");
+        MainWindow w(0, brokerURI, 0, useTopic, sessionTransacted, "Fibird");
         w.show();
+        //LoginDialog lgDlg;
 
+        //lgDlg.show();
         // Start the consumer thread
         //Thread consumerThread(&consumer);
         //consumerThread.start();

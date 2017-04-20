@@ -15,13 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     sender.cpp \
-    receiver.cpp
+    receiver.cpp \
+    logindialog.cpp
 
 HEADERS  += mainwindow.h \
     sender.h \
-    receiver.h
+    receiver.h \
+    logindialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    logindialog.ui
 
 #-----------------activemq cpp lib-------------------
 INCLUDEPATH += /usr/local/include/activemq-cpp-3.9.4

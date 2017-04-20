@@ -39,11 +39,12 @@ private:
     bool useTopic;
     bool sessionTransacted;
     std::string brokerURI;
+    std::string queueName;
 private:
     Sender(const Sender&);
     Sender& operator=(const Sender&);
 public:
-    Sender(const std::string& brokerURI, int numMessages = 0, bool useTopic = false, bool sessionTransacted = false);
+    Sender(string qname, const string& brokerURI, int numMessages = 0, bool useTopic = false, bool sessionTransacted = false);
     virtual ~Sender();
     void close();
     void sendMessage(string queueOrTopic, string msg);

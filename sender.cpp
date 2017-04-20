@@ -19,12 +19,13 @@ using namespace decaf::util;
 using namespace decaf::lang;
 using namespace cms;
 
-Sender::Sender(const std::string &brokerURI, int numMessages, bool useTopic, bool sessionTransacted) :
+Sender::Sender(std::string qname, const std::string &brokerURI, int numMessages, bool useTopic, bool sessionTransacted) :
     destination(NULL),
     numMessages(numMessages),
     useTopic(useTopic),
     sessionTransacted(sessionTransacted),
-    brokerURI(brokerURI)
+    brokerURI(brokerURI),
+    queueName(qname)
 {
     try
     {
@@ -96,7 +97,7 @@ Sender::~Sender()
     cleanup();
 }
 
-void Sender::sendMessage(std::string queueOrTopic, std::string msg)
+void Sender::sendMessage(string queueOrTopic, std::string msg)
 {
     try
     {
