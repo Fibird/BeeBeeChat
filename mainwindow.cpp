@@ -44,8 +44,9 @@ void MainWindow::on_sendBtn_clicked()
         ui->msgSendTextEdit->clear();
         QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
         ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
-        ui->MsgReceiveTextBrowser->append("[ Me ]" + time);
-        ui->MsgReceiveTextBrowser->append(qs);
+        ui->MsgReceiveTextBrowser->append("<li>[ Me ]" + time + "</li>");
+        ui->MsgReceiveTextBrowser->append("<li><i>" + qs + "</i></li>");
+        ui->MsgReceiveTextBrowser->append("\n");
     }
     else
     {
@@ -58,9 +59,10 @@ void MainWindow::showMessage(const QString& msg)
     std::string rn = getReceiver();
     QString qrn = QString::fromStdString(rn);
     QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
-    ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
-    ui->MsgReceiveTextBrowser->append("[ " + qrn + " ]" + time);
-    ui->MsgReceiveTextBrowser->append(msg);
+    ui->MsgReceiveTextBrowser->setTextColor(Qt::red);
+    ui->MsgReceiveTextBrowser->append("<li>[ " + qrn + " ]" + time+ "</li>");
+    ui->MsgReceiveTextBrowser->append("<li>" + msg + "</li>");
+    ui->MsgReceiveTextBrowser->append("\n");
 }
 
 std::string MainWindow::getReceiver()
