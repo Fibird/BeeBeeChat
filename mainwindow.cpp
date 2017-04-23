@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QString>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QDateTime>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent, const std::string& brokerURI, string nickname, int numMessages, bool useTopic, bool sessionTransacted) :
     QMainWindow(parent),
@@ -9,6 +13,12 @@ MainWindow::MainWindow(QWidget *parent, const std::string& brokerURI, string nic
     receiver(brokerURI, nickname, numMessages, useTopic)
 {
     ui->setupUi(this);
+    connect(&receiver, &Receiver::showMessage, this, &MainWindow::showMessage);
+    QTableWidgetItem *cnt = new QTableWidgetItem("Me");
+    QTableWidgetItem *sts = new QTableWidgetItem("Online");
+    ui->contactList->insertRow(0);
+    ui->contactList->setItem(0, 0, cnt);
+    ui->contactList->setItem(0, 1, sts);
 }
 
 MainWindow::~MainWindow()
@@ -24,10 +34,60 @@ bool MainWindow::createSession()
 void MainWindow::on_sendBtn_clicked()
 {
     QString qs = ui->msgSendTextEdit->toPlainText();
+    std::string rn = getReceiver();
+    std::string msg;
     if (!qs.isEmpty())
     {
-        std::string msg = qs.toStdString();
-        sender.sendMessage("fibird", msg);
+        if (rn != "")
+        {
+            msg = qs.toStdString();
+            sender.sendMessage(rn, msg);
+            ui->msgSendTextEdit->clear();
+            QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
+            ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
+            ui->MsgReceiveTextBrowser->append("[ Me ]" + time);
+            ui->MsgReceiveTextBrowser->append(qs);
+        }
+        else
+        {
+            QMessageBox::information(this, tr("info"), tr("A contact must be selected!"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
+    }
+    else
+    {
+        std::cout << "line:48" << endl;
+        QMessageBox::information(this, tr("info"), tr("Message can't be null!"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 }
 
+void MainWindow::showMessage(std::string& msg)
+{
+
+}
+
+std::string MainWindow::getReceiver()
+{
+    int row = ui->contactList->currentColumn();
+    if (row < 0)
+    {
+        row = 0;
+    }
+    QString rn = ui->contactList->item(row, 0)->text();
+    return rn.toStdString();
+}
+
+void MainWindow::on_addContactBtn_clicked()
+{
+    bool ok;
+    QString CntName = QInputDialog::getText(this, tr("Add Contact"),
+                                            tr("Name:"), QLineEdit::Normal,
+                                            QDir::home().dirName(), &ok);
+    if (ok && !CntName.isEmpty())
+    {
+        QTableWidgetItem *cnt = new QTableWidgetItem(CntName);
+        QTableWidgetItem *sts = new QTableWidgetItem("Online");
+        ui->contactList->insertRow(0);
+        ui->contactList->setItem(0, 0, cnt);
+        ui->contactList->setItem(0, 1, sts);
+    }
+}

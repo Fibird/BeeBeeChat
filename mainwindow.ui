@@ -51,7 +51,7 @@
      <string>Send</string>
     </property>
    </widget>
-   <widget class="QTableView" name="contactList">
+   <widget class="QTableWidget" name="contactList">
     <property name="geometry">
      <rect>
       <x>530</x>
@@ -59,6 +59,38 @@
       <width>191</width>
       <height>351</height>
      </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="showGrid">
+     <bool>false</bool>
+    </property>
+    <column>
+     <property name="text">
+      <string>Friends</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>status</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="addContactBtn">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>360</y>
+      <width>85</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add</string>
     </property>
    </widget>
   </widget>

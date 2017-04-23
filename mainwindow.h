@@ -19,6 +19,8 @@ public:
     ~MainWindow();
 private slots:
     void on_sendBtn_clicked();
+    void on_addContactBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 public:
@@ -26,6 +28,8 @@ public:
     Receiver receiver;
 public:
     bool createSession();
+    std::string getReceiver();
+    void showMessage(string &msg);
 };
 
 #endif // MAINWINDOW_H
