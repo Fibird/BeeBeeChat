@@ -106,7 +106,8 @@ void Receiver::onMessage(const Message *message)
         }
 
         //printf("Message #%d Received: %s\n", count, text.c_str());
-        emit showMessage(text);
+        QString qtext = QString::fromStdString(text);
+        emit showMessage(qtext);
     }
     catch (CMSException& e)
     {

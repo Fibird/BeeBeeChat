@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent, const std::string& brokerURI, string nic
 {
     ui->setupUi(this);
     connect(&receiver, &Receiver::showMessage, this, &MainWindow::showMessage);
-    QTableWidgetItem *cnt = new QTableWidgetItem("Me");
+    QString qnn = QString::fromStdString(nickname);
+    QTableWidgetItem *cnt = new QTableWidgetItem(qnn);
     QTableWidgetItem *sts = new QTableWidgetItem("Online");
     ui->contactList->insertRow(0);
     ui->contactList->setItem(0, 0, cnt);
@@ -37,32 +38,29 @@ void MainWindow::on_sendBtn_clicked()
     std::string rn = getReceiver();
     std::string msg;
     if (!qs.isEmpty())
-    {
-        if (rn != "")
-        {
-            msg = qs.toStdString();
-            sender.sendMessage(rn, msg);
-            ui->msgSendTextEdit->clear();
-            QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
-            ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
-            ui->MsgReceiveTextBrowser->append("[ Me ]" + time);
-            ui->MsgReceiveTextBrowser->append(qs);
-        }
-        else
-        {
-            QMessageBox::information(this, tr("info"), tr("A contact must be selected!"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        }
+    {       
+        msg = qs.toStdString();
+        sender.sendMessage(rn, msg);
+        ui->msgSendTextEdit->clear();
+        QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
+        ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
+        ui->MsgReceiveTextBrowser->append("[ Me ]" + time);
+        ui->MsgReceiveTextBrowser->append(qs);
     }
     else
     {
-        std::cout << "line:48" << endl;
         QMessageBox::information(this, tr("info"), tr("Message can't be null!"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 }
 
-void MainWindow::showMessage(std::string& msg)
+void MainWindow::showMessage(const QString& msg)
 {
-
+    std::string rn = getReceiver();
+    QString qrn = QString::fromStdString(rn);
+    QString time = QDateTime::currentDateTime().toString("yyyy-MM-ddhh:mm:ss");
+    ui->MsgReceiveTextBrowser->setTextColor(Qt::blue);
+    ui->MsgReceiveTextBrowser->append("[ " + qrn + " ]" + time);
+    ui->MsgReceiveTextBrowser->append(msg);
 }
 
 std::string MainWindow::getReceiver()

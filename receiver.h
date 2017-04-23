@@ -61,7 +61,7 @@ public:
 private:
     void cleanup();
 signals:
-    void showMessage(std::string& msg);
+    void showMessage(const QString& msg);
 };
 
 #endif // RECEIVER_H

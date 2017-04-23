@@ -29,7 +29,7 @@ public:
 public:
     bool createSession();
     std::string getReceiver();
-    void showMessage(string &msg);
+    void showMessage(const QString &msg);
 };
 
 #endif // MAINWINDOW_H
