@@ -19,13 +19,17 @@ using namespace decaf::util;
 using namespace decaf::lang;
 using namespace cms;
 
-Sender::Sender(std::string qname, const std::string &brokerURI, int numMessages, bool useTopic, bool sessionTransacted) :
+Sender::Sender(const std::string &brokerURI, std::string qname, int numMessages, bool useTopic, bool sessionTransacted) :
     destination(NULL),
     numMessages(numMessages),
     useTopic(useTopic),
     sessionTransacted(sessionTransacted),
     brokerURI(brokerURI),
     queueName(qname)
+{
+}
+
+bool Sender::createSession()
 {
     try
     {
@@ -48,10 +52,12 @@ Sender::Sender(std::string qname, const std::string &brokerURI, int numMessages,
         // Create a MessageProducer from the Session to the topic or queue
         producer = session->createProducer(destination);
         //producer->setDeliveryMode(DeliveryMode::NON_PERSISTENT);
+        return true;
     }
     catch (CMSException& e)
     {
         e.printStackTrace();
+        return false;
     }
 }
 

@@ -44,9 +44,10 @@ private:
     Sender(const Sender&);
     Sender& operator=(const Sender&);
 public:
-    Sender(string qname, const string& brokerURI, int numMessages = 0, bool useTopic = false, bool sessionTransacted = false);
+    Sender(const string& brokerURI, string qname, int numMessages = 0, bool useTopic = false, bool sessionTransacted = false);
     virtual ~Sender();
     void close();
+    bool createSession();
     void sendMessage(string queueOrTopic, string msg);
 private:
     void cleanup();

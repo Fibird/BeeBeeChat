@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
         bool useTopic = false;
         bool sessionTransacted = false;
         //String userName =
-        MainWindow w(0, brokerURI, 0, useTopic, sessionTransacted, "Fibird");
+        MainWindow w(0, brokerURI, "fibird", 0, useTopic, sessionTransacted);
         w.show();
         //LoginDialog lgDlg;
 
