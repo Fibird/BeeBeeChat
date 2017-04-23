@@ -1,6 +1,8 @@
 #include "receiver.h"
 
-Receiver::Receiver(const std::string& brokerURI, int numMessages, bool useTopic, bool sessionTransacted, int waitMillis) :
+Receiver::Receiver(const std::string& brokerURI, std::string userName, int numMessages,
+                   bool useTopic, bool sessionTransacted, int waitMillis, QObject *parent) :
+    QObject(parent),
     latch(1),
     doneLatch(numMessages),
     connection(NULL),
@@ -10,7 +12,8 @@ Receiver::Receiver(const std::string& brokerURI, int numMessages, bool useTopic,
     waitMillis(waitMillis),
     useTopic(useTopic),
     sessionTransacted(sessionTransacted),
-    brokerURI(brokerURI)
+    brokerURI(brokerURI),
+    userName(userName)
 {
 }
 
@@ -54,11 +57,11 @@ void Receiver::run()
         // Create the destination (Topic or Queue)
         if (useTopic)
         {
-            destination = session->createTopic("BeeBee.talk");
+            destination = session->createTopic(userName);
         }
         else
         {
-            destination = session->createQueue("BeeBee.talk");
+            destination = session->createQueue(userName);
         }
 
         // Create a MessageConsumer from the Session to the Topic or Queue
@@ -102,8 +105,8 @@ void Receiver::onMessage(const Message *message)
             text = "NOT A TEXTMESSAGE!";
         }
 
-        printf("Message #%d Received: %s\n", count, text.c_str());
-
+        //printf("Message #%d Received: %s\n", count, text.c_str());
+        emit showMessage(text);
     }
     catch (CMSException& e)
     {
@@ -158,4 +161,3 @@ void Receiver::cleanup()
         e.printStackTrace();
     }
 }
-

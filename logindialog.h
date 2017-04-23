@@ -21,6 +21,8 @@ private:
 private:
     std::string nickname;
     char pwd[16];
+public:
+    std::string getUserName();
 };
 
 #endif // LOGINDIALOG_H

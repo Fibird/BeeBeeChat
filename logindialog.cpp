@@ -1,5 +1,6 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
+#include <QString>
 
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
@@ -12,3 +13,11 @@ LoginDialog::~LoginDialog()
 {
     delete dlgUi;
 }
+
+std::string LoginDialog::getUserName()
+{
+    QString qs = dlgUi->nicknamelineEdit->text();
+    return qs.toStdString();
+}
+
+

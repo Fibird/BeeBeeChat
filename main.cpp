@@ -3,6 +3,9 @@
 #include "receiver.h"
 #include "logindialog.h"
 #include <QApplication>
+#include <QDialog>
+#include <QMessageBox>
+#include <QObject>
 
 int main(int argc, char *argv[])
 {
@@ -17,33 +20,29 @@ int main(int argc, char *argv[])
         //============================================================
         bool useTopic = false;
         bool sessionTransacted = false;
-        //String userName =
-        MainWindow w(0, brokerURI, "fibird", 0, useTopic, sessionTransacted);
-        w.show();
-        //LoginDialog lgDlg;
-
-        //lgDlg.show();
-        // Start the consumer thread
-        //Thread consumerThread(&consumer);
-        //consumerThread.start();
-
-        // Wait for the consumer to indicate that its ready to go.
-        //consumer.waitUntilReady();
-
-        // Start the producer thread.
-        //Thread producerThread(&producer);
-        //producerThread.start();
-        //producer.sendMessage("Hello!");
-
-        // Wait for the threads to complete
-        //producerThread.join();
-        //consumerThread.join();
-
-        //long long endTime = System::currentTimeMillis();
-        //double totalTime = (double)(endTime - startTime) / 1000.0;
-
-        //consumer.close();
-        //producer.close();
+        std::string userName;
+        MainWindow *w;
+        Thread *consumerThread;
+        LoginDialog lgDlg;
+        lgDlg.show();
+        if (lgDlg.exec() == QDialog::Accepted)
+        {
+            userName = lgDlg.getUserName();
+            if (userName != "")
+            {
+                w = new MainWindow(0, brokerURI, userName, 0, useTopic, sessionTransacted);
+                w->createSession();
+                w->show();
+                // create connection with activemq and create a session
+                consumerThread = new Thread(&w->receiver);
+                consumerThread->start();
+            }
+            else
+            {
+                QMessageBox::information(&lgDlg, QObject::tr("info"), QObject::tr("User name can't be null!"));
+            }
+        }
+        consumerThread->join();
         return a.exec();
     } 
     activemq::library::ActiveMQCPP::shutdownLibrary();

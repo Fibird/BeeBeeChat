@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
+#include <QObject>
 
 using namespace activemq::core;
 using namespace decaf::util::concurrent;
@@ -27,10 +28,12 @@ using namespace decaf::util;
 using namespace decaf::lang;
 using namespace cms;
 
-class Receiver : public Runnable,
+class Receiver : public QObject,
+                 public Runnable,
                  public ExceptionListener,
                  public MessageListener
 {
+    Q_OBJECT
 private:
     CountDownLatch latch;
     CountDownLatch doneLatch;
@@ -42,11 +45,13 @@ private:
     bool useTopic;
     bool sessionTransacted;
     std::string brokerURI;
+    std::string userName;
 private:
     Receiver(const Receiver&);
     Receiver& operator =(const Receiver&);
 public:
-    Receiver(const std::string& brokerURI, int numMessages, bool useTopic = false, bool sessionTransacted = false, int waitMillis = 30000);
+    Receiver(const std::string& brokerURI, std::string userName, int numMessages, bool useTopic = false,
+             bool sessionTransacted = false, int waitMillis = 30000, QObject *parent = 0);
     virtual ~Receiver();
     void close();
     void waitUntilReady();
@@ -55,6 +60,8 @@ public:
     virtual void onException(const CMSException &ex);
 private:
     void cleanup();
+signals:
+    void showMessage(std::string& msg);
 };
 
 #endif // RECEIVER_H

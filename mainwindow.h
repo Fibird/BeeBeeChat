@@ -24,6 +24,8 @@ private:
 public:
     Sender sender;
     Receiver receiver;
+public:
+    bool createSession();
 };
 
 #endif // MAINWINDOW_H
